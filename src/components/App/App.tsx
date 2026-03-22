@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import SearchBox from '../SearchBox/SearchBox';
 import Pagination from '../Pagination/Pagination';
@@ -14,8 +10,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
 
-import { createNote, deleteNote, fetchNotes } from '../../services/noteService';
-import type { NewNoteData } from '../../services/noteService';
+import { fetchNotes } from '../../services/noteService';
 import css from './App.module.css';
 
 export default function App() {
@@ -23,8 +18,6 @@ export default function App() {
   const [inputValue, setInputValue] = useState('');
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const queryClient = useQueryClient();
 
   const updateSearch = useDebouncedCallback((value: string) => {
     setSearch(value.trim());
@@ -39,31 +32,9 @@ export default function App() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['notes', page, search],
     queryFn: () => fetchNotes(page, 12, search),
+    placeholderData: keepPreviousData,
     retry: false,
   });
-
-  const createNoteMutation = useMutation({
-    mutationFn: (newNote: NewNoteData) => createNote(newNote),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      setIsModalOpen(false);
-    },
-  });
-
-  const deleteNoteMutation = useMutation({
-    mutationFn: (id: string) => deleteNote(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-    },
-  });
-
-  const handleCreateNote = async (values: NewNoteData) => {
-    await createNoteMutation.mutateAsync(values);
-  };
-
-  const handleDeleteNote = (id: string) => {
-    deleteNoteMutation.mutate(id);
-  };
 
   return (
     <div className={css.app}>
@@ -84,7 +55,7 @@ export default function App() {
 
       {data && data.notes.length > 0 && (
         <>
-          <NoteList notes={data.notes} onDelete={handleDeleteNote} />
+          <NoteList notes={data.notes} />
           <Pagination
             page={page}
             totalPages={data.totalPages}
@@ -99,11 +70,7 @@ export default function App() {
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm
-            onSubmit={handleCreateNote}
-            onCancel={() => setIsModalOpen(false)}
-            isSubmitting={createNoteMutation.isPending}
-          />
+          <NoteForm onClose={() => setIsModalOpen(false)} />
         </Modal>
       )}
     </div>

@@ -1,14 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, type MouseEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
 
 export interface ModalProps {
-  children: React.ReactNode;
+  children: ReactNode;
   onClose: () => void;
 }
 
 export default function Modal({ children, onClose }: ModalProps) {
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
@@ -18,13 +21,12 @@ export default function Modal({ children, onClose }: ModalProps) {
     window.addEventListener('keydown', handleEscape);
 
     return () => {
+      document.body.style.overflow = originalOverflow;
       window.removeEventListener('keydown', handleEscape);
     };
   }, [onClose]);
 
-  const handleBackdropClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const handleBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
