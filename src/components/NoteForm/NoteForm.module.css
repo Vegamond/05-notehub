@@ -1,0 +1,78 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  border: 1px solid #cfd6e4;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 16px;
+  outline: none;
+  background-color: #fff;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: #3470ff;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancelButton,
+.submitButton {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.submitButton {
+  background-color: #3470ff;
+  color: #fff;
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

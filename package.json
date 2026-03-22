@@ -1,0 +1,29 @@
+{
+  "name": "05-notehub",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-paginate": "^7.1.4",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.1"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.94.5",
+    "axios": "^1.13.6",
+    "formik": "^2.4.9",
+    "modern-normalize": "^3.0.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-paginate": "^8.3.0",
+    "use-debounce": "^10.1.0",
+    "yup": "^1.7.1"
+  }
+}
